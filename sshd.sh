@@ -73,6 +73,12 @@ if [ -z "$LOCAL" -o "$LOCAL" == 0 ]; then
     sed -i "s;\AllowTcpForwarding no;AllowTcpForwarding yes;g" $SDIR/sshd_config
 fi
 
+# Send null packet to the client after 60 seconds; retry 5 times of no reply comes back.
+# This is recommended to be used with autossh on client side.
+if [ -z "$LOCAL" -o "$LOCAL" == 0 ]; then
+    sed -i "s;\#ClientAliveInterval 0;ClientAliveInterval 60;g" $SDIR/sshd_config
+fi
+
 # Allow root login if a password was set.
 if [ -n "${PASSWORD}" ]; then
     sed -i "s;\#PermitRootLogin .*;PermitRootLogin yes;g" $SDIR/sshd_config
